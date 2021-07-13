@@ -1,8 +1,13 @@
+##########################################################################################################
+# Author: Gene Lee
+# CS 540 (Summer 2021)
+########################################################################################################## 
+
 import csv
 import math
 import numpy as np
 
-# helper functions for question outputs
+############################################ HELPER FUNCTIONS ############################################
 def z(w, x, b):
     return np.dot(w, x) + b
 def logisitc_activation(z_val):
@@ -84,6 +89,7 @@ def q8(a_2):
         filehandle.writelines("%s\n" % q8)
     filehandle.close()
 
+############################################### CODE SETUP ###############################################
 feature_matrix = []
 labels = []
 m = 784 # total number of pixels

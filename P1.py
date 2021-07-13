@@ -164,10 +164,6 @@ while abs(c_old - c_new) > 0.0001 and c_new > 1 and iterations < 1000:
 
     alpha = alpha / math.sqrt(iterations) # update alpha value
 
-#TODO: DELETE
-print(c_new)
-print(c_old)
-
 # Question 2
 q2(w, b) # call helper function q2()
 
@@ -188,49 +184,53 @@ b_1 = np.random.uniform(low = -1.0, high = 1.0, size = h)
 w_2 = np.random.uniform(low = -1.0, high = 1.0, size = h)
 b_2 = np.random.uniform(low = -1.0, high = 1.0)
 
-alpha = 0.001
+alpha = 0.1
 c_old = 10000
 c_new = 10
 iterations = 0
+image_list = [x for x in range(n)] # list of training image indexes
 
-while iterations < 15000 or abs(c_old - c_new) > 0.0001:
+while iterations < 1000 and abs(c_old - c_new) > 0.0001:
     c_old = c_new
     c_new = 0
     iterations = iterations + 1
-    print(iterations)
 
-    image_list = [x for x in range(n)] # list of training image indexes
-    np.random.shuffle(image_list) # shuffle images for stochastic gradient descent
-    i = image_list[0] # index of random image
+    for point in range(n): # stochastic gradient descent
+        i = np.random.choice(image_list, size = None, replace = False) # choose random training image without replacement
 
-    # find activation values for hidden layer
-    a_1 = [0]*h
-    for j in range(h):
-        z_val = z(w_1[:, j], feature_matrix[i], b_1[j])
-        a_1[j] = logisitc_activation(z_val)
+        # find activation values for hidden layer
+        a_1 = [0]*h
+        for j in range(h):
+            a_1[j] = logisitc_activation(z(w_1[:, j], feature_matrix[i], b_1[j]))
 
-    # find output activation value
-    a_2 = 0
-    z_val = z(w_2, a_1, b_2)
-    a_2 = logisitc_activation(z_val)
+        # find output activation value
+        a_2 = 0
+        a_2 = logisitc_activation(z(w_2, a_1, b_2))
 
-    # update weights and biases for each layer based on activation values
-    dC_db_2 = (a_2 - labels[i]) * a_2 * (1 - a_2)
-    b_2 = b_2 - (alpha * dC_db_2)
-    for j in range(h):
-        dC_db_1 = (a_2 - labels[i]) * a_2 * (1 - a_2) * w_2[j] * a_1[j] * (1 - a_1[j])
-        dC_dw_1 = np.multiply(feature_matrix[i], dC_db_1)
-        w_1[:, j] = np.subtract(w_1[:, j], np.multiply(dC_dw_1, alpha))
-        b_1[j] = b_1[j] - (alpha * dC_db_1)
+        # update weights and biases for each layer based on activation values
+        dC_db_2 = (a_2 - labels[i]) * a_2 * (1 - a_2)
+        b_2 = b_2 - (alpha * dC_db_2)
+        for j in range(h):
+            dC_db_1 = (a_2 - labels[i]) * a_2 * (1 - a_2) * w_2[j] * a_1[j] * (1 - a_1[j])
+            dC_dw_1 = np.multiply(feature_matrix[i], dC_db_1)
+            w_1[:, j] = np.subtract(w_1[:, j], np.multiply(dC_dw_1, alpha))
+            b_1[j] = b_1[j] - (alpha * dC_db_1)
 
-        dC_dw_2 = dC_db_2 * a_1[j]
-        w_2[j] = w_2[j] - (alpha * dC_dw_2)
+            dC_dw_2 = dC_db_2 * a_1[j]
+            w_2[j] = w_2[j] - (alpha * dC_dw_2)
 
-    c_new = 0.5 * math.pow((labels[i] - a_2), 2) # find cost
+    a_1 = np.zeros((n, h))
+    a_2 = [0]*n
+    for i in range(n): # for each training image
+        for j in range(h): # compute first layer activation function
+            a_1[i][j] = logisitc_activation(z(w_1[:, j], feature_matrix[i], b_1[j]))
+
+        # compute second layer activation function
+        a_2[i] = logisitc_activation(z( a_1[i], w_2, b_2))
+        c_new = c_new + 0.5 * math.pow((labels[i] - a_2[i]), 2) # find cost
+
     alpha = alpha / math.sqrt(iterations) # update alpha value
-
-print(c_old)
-print(c_new)
+    print(f"iteration = {iterations}\t\t old cost = {c_old}\t\t new cost = {c_new}")
 
 # Question 5
 q5(w_1, b_1)
@@ -241,13 +241,11 @@ q6(w_2, b_2)
 # Question 7
 q7_a_1 = np.zeros((200, h))
 q7_a_2 = [0]*200
-for i in range(200): 
-    for j in range(h): # compute first layer activation function for each test image
-        z_val = z(test_data[i], w_1[:, j], b_1[j])
-        q7_a_1[i][j] = logisitc_activation(z_val)
-    # compute second layer activation function for each test image
-    z_val = z( q7_a_1[i], w_2, b_2)
-    q7_a_2[i] = logisitc_activation(z_val)
+for i in range(200): # for each test image
+    for j in range(h): # compute first layer activation function
+        q7_a_1[i][j] = logisitc_activation(z(test_data[i], w_1[:, j], b_1[j]))
+    # compute second layer activation function
+    q7_a_2[i] = logisitc_activation(z( q7_a_1[i], w_2, b_2))
 q7(q7_a_2)
 
 # Question 8

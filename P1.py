@@ -23,7 +23,6 @@ def q1(feature_vector):
     q1 = q1[:-2] # remove last ', ' from string
     with open('P1\P1_Q1.txt', 'w') as filehandle: # write feature vector to a text file
         filehandle.writelines("%s\n" % q1)
-    filehandle.close()
 def q2(w, b):
     q2 = ''
     for weight in w: # store weights vector to a string
@@ -31,7 +30,6 @@ def q2(w, b):
     q2 = q2 + str(round(b,4)) # add bias to end of string
     with open('P1\P1_Q2.txt', 'w') as filehandle: # write weights and bias to a text file
         filehandle.writelines("%s\n" % q2)
-    filehandle.close()
 def q3(a):
     q3 = ''
     for a_val in a: # store test image's activation function values to a string
@@ -39,7 +37,6 @@ def q3(a):
     q3 = q3[:-2] # remove last ', ' from string
     with open('P1\P1_Q3.txt', 'w') as filehandle: # write activation values to a text file
         filehandle.writelines("%s\n" % q3)
-    filehandle.close()
 def q4(a):
     q4 = ''
     for a_val in a: # compute test image's predicted label and store to a string
@@ -48,7 +45,6 @@ def q4(a):
     q4 = q4[:-2] # remove last ', ' from string
     with open('P1\P1_Q4.txt', 'w') as filehandle: # write predicted labels to a text file
         filehandle.writelines("%s\n" % q4)
-    filehandle.close()
 def q5(w_1, b_1):
     with open('P1\P1_Q5.txt', 'w') as filehandle: # write weights and bias to a text file
         for i in range(len(w_1)):
@@ -62,7 +58,6 @@ def q5(w_1, b_1):
             q5_b = q5_b + str(round(bias,4)) + ', '
         q5_b = q5_b[:-2] # remove last ', ' from string
         filehandle.writelines("%s\n" % q5_b) # write line to file
-    filehandle.close()
 def q6(w_2, b_2):
     q6 = ''
     for weight in w_2: # store weights vector to a string
@@ -70,7 +65,6 @@ def q6(w_2, b_2):
     q6 = q6 + str(round(b_2,4)) # add bias to end of string
     with open('P1\P1_Q6.txt', 'w') as filehandle: # write weights and bias to a text file
         filehandle.writelines("%s\n" % q6)
-    filehandle.close()
 def q7(a_2):
     q7 = ''
     for a_val in a_2: # store test image's activation function values to a string
@@ -78,7 +72,6 @@ def q7(a_2):
     q7 = q7[:-2] # remove last ', ' from string
     with open('P1\P1_Q7.txt', 'w') as filehandle: # write activation values to a text file
         filehandle.writelines("%s\n" % q7)
-    filehandle.close()
 def q8(a_2):
     q8 = ''
     for a_val in a_2: # compute test image's predicted label and store to a string
@@ -87,7 +80,6 @@ def q8(a_2):
     q8 = q8[:-2] # remove last ', ' from string
     with open('P1\P1_Q8.txt', 'w') as filehandle: # write predicted labels to a text file
         filehandle.writelines("%s\n" % q8)
-    filehandle.close()
 
 ############################################### CODE SETUP ###############################################
 feature_matrix = []
@@ -107,7 +99,6 @@ with open('P1\P1_Training_Set.csv') as csv_file:
             labels.append(1) # if image is a 6, label as 1
             feature_matrix.append(np.divide(list(map(int, row[1:])), 255.0)) # add to feature matrix
             n = n + 1
-csv_file.close()
 feature_matrix = np.array(feature_matrix)
 #print(f"feature matrix size = {len(feature_matrix)} x {len(feature_matrix[0])}")
 #print(f"labels vector size = {len(labels)} x 1")
@@ -119,7 +110,6 @@ with open('P1\P1_Test_Set.txt') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     for row in csv_reader: # iterate over all rows in the csv file
         test_data.append(np.divide(list(map(int, row)), 255.0)) # add to feature matrix
-csv_file.close()
 test_data = np.array(test_data)
 
 ################################################# PART 1 #################################################
